@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "task1": "nodemon src/home-work-1/task-1.js",
-    "task2": "nodemon src/home-work-1/task-2.js"
+    "task1": "nodemon --exec babel-node src/home-work-1/task-1.js",
+    "task2": "nodemon --exec babel-node src/home-work-1/task-2.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/node": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
     "nodemon": "^2.0.20"
   },
   "dependencies": {
