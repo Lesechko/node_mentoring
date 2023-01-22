@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { IUser } from "./models.js";
+import { IUser } from "./models/User.js";
 
 const validator = (schema: Joi.ObjectSchema<IUser>) => (payload: IUser) =>
   schema.validate(payload, { abortEarly: false });
