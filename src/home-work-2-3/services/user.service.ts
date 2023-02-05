@@ -1,12 +1,17 @@
-import { Model, Op } from "sequelize";
+import { Model, Op, Transaction } from "sequelize";
 import { IUser, User } from "../models/User.js";
 
 export const getAllUsers = (): Promise<Model<IUser, IUser>[]> => {
   return User.findAll();
 };
 
-export const getUserByID = async (id: string): Promise<IUser> => {
-  return (await User.findOne({ where: { id } })).toJSON();
+export const getUserByID = async (
+  id: string,
+  transaction?: Transaction
+): Promise<Model<IUser, IUser>> => {
+  const t = transaction ? { transaction } : {};
+
+  return await User.findOne({ where: { id }, ...t });
 };
 
 export const getAutoSuggestUsers = (loginSubstring: string, limit: number) => {
@@ -44,7 +49,7 @@ export const updateUser = async (
     return null;
   }
 
-  const user = await getUserByID(id);
+  const user = (await getUserByID(id)).toJSON();
 
   if (!user) {
     return null;

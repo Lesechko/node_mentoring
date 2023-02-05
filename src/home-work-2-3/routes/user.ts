@@ -1,5 +1,5 @@
 import express, { Request } from "express";
-import { validationMiddleware } from "../middleware/user.middleware.js";
+import { userValidationMiddleware } from "../middleware/user.middleware.js";
 import { IUser } from "../models/User.js";
 import {
   addUser,
@@ -23,10 +23,10 @@ router.get("/", getUsers);
 
 router.post("/autosuggest", getUsersByLoginSubstring);
 
-router.post("/add", validationMiddleware, addUser);
+router.post("/add", userValidationMiddleware, addUser);
 
 router.get("/:id", getUserByID);
 
-router.put("/:id", validationMiddleware, updateUser);
+router.put("/:id", userValidationMiddleware, updateUser);
 
 router.delete("/:id", deleteUser);

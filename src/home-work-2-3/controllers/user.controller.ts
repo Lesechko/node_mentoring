@@ -1,6 +1,8 @@
 import { NextFunction, Response } from "express";
+import { sequelize } from "../DB/index.js";
 import { IGetUserAuthInfoRequest } from "../routes/user.js";
 import * as UserService from "../services/user.service.js";
+import * as UserGroupService from "../services/userGroup.service.js";
 
 export const addUserToRequest = async (
   req: IGetUserAuthInfoRequest,
@@ -18,7 +20,7 @@ export const addUserToRequest = async (
       return;
     }
 
-    req.user = user;
+    req.user = user.toJSON();
 
     next();
   } catch (err) {
@@ -66,7 +68,7 @@ export const addUser = async (
     const user = await UserService.addUser(req.body);
 
     if (user) {
-      res.status(201).json(user);
+      res.status(201).json(user.dataValues);
     } else {
       res.sendStatus(501);
     }
@@ -96,6 +98,22 @@ export const deleteUser = async (
     const user = await UserService.deleteUser(req.user.id);
 
     res.json(user);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+export const addUsersToGroup = async (
+  req: IGetUserAuthInfoRequest,
+  res: Response
+) => {
+  try {
+    const userID = req.user.id;
+    const groupID = req.body.id;
+
+    UserGroupService.addUsersToGroup(groupID, userID, sequelize);
+
+    res.status(200);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
