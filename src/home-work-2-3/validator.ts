@@ -1,5 +1,6 @@
 import Joi from "joi";
-import { IUser } from "./models.js";
+import { Permission } from "./models/Group.js";
+import { IUser } from "./models/User.js";
 
 const validator = (schema: Joi.ObjectSchema<IUser>) => (payload: IUser) =>
   schema.validate(payload, { abortEarly: false });
@@ -17,4 +18,20 @@ const userSchema = Joi.object({
   id: Joi.string(),
 });
 
+const groupSchema = Joi.object({
+  name: Joi.string().required(),
+  permissions: Joi.array()
+    .required()
+    .items(
+      Joi.string().valid(
+        Permission.DELETE,
+        Permission.READ,
+        Permission.SHARE,
+        Permission.UPLOAD_FILES,
+        Permission.WRITE
+      )
+    ),
+});
+
 export const validateUser = validator(userSchema);
+export const validateGroup = validator(groupSchema);
