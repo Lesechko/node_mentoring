@@ -8,14 +8,12 @@ export interface IUser {
   id?: string;
 }
 
-type UserModel = ModelCtor<Model<IUser, IUser>>;
-
-export let User: UserModel = null;
+export type UserModel = ModelCtor<Model<IUser, IUser>>;
 
 export const defineUserModel = async (
   sequelize: Sequelize
-): Promise<UserModel> => {
-  const U = sequelize.define(
+): Promise<UserModel> =>
+  sequelize.define(
     "User",
     {
       login: {
@@ -50,8 +48,3 @@ export const defineUserModel = async (
       timestamps: false,
     }
   );
-
-  User = U;
-
-  return User;
-};

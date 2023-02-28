@@ -1,23 +1,25 @@
 import { Sequelize } from "sequelize";
 import config from "../../config/config.js";
-import { defineGroupModel } from "../models/Group.js";
-import { defineUserModel } from "../models/User.js";
-import { addAssociatios } from "../models/UserGroup.js";
+import { defineGroupModel, GroupModel } from "./models/Group.js";
+import { defineUserModel, UserModel } from "./models/User.js";
+import { addAssociatios } from "./models/UserGroup.js";
 
-export let sequelize: Sequelize
+export let sequelize: Sequelize = null;
+export let User: UserModel = null;
+export let Group: GroupModel = null;
 
 export const runDB = async (): Promise<void> => {
   const { database, username, password, host, dialect } = config;
 
-   sequelize = new Sequelize(database, username, password, {
+  sequelize = new Sequelize(database, username, password, {
     host,
     dialect,
   });
 
   try {
     await sequelize.authenticate();
-    const Group = await defineGroupModel(sequelize);
-    const User = await defineUserModel(sequelize);
+    Group = await defineGroupModel(sequelize);
+    User = await defineUserModel(sequelize);
     addAssociatios(Group, User);
 
     await sequelize.sync({ alter: true });

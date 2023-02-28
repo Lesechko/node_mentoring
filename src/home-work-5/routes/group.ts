@@ -7,7 +7,7 @@ import {
   removeGroup,
   updateGroup,
 } from "../controllers/group.controller.js";
-import { IGroup } from "../models/Group.js";
+import { IGroup } from "../DB/models/Group.js";
 import { groupValidationMiddleware } from "../middleware/group.middleware.js";
 
 export interface IGetGroupRequest extends Request {

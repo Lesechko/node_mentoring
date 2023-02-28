@@ -1,29 +1,22 @@
 import { NextFunction, Response, Request } from "express";
 import { IGetGroupRequest } from "../routes/group.js";
-import * as GroupService from "../services/group.service.js";
+import { groupService } from "../services/group.service.js";
 
 export const addGroupToRequest = async (
   req: IGetGroupRequest,
-  res: Response,
+  _res: Response,
   next: NextFunction,
   id: string
 ): Promise<void> => {
   try {
-    const group = await GroupService.getGroupByID(id);
-
-    if (!group) {
-      res
-        .status(404)
-        .json({ message: `Group with id ${req.params.id} not found` });
-      return;
-    }
+    const group = await groupService.getGroupByID(id);
 
     req.group = group.toJSON();
 
     next();
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "getGroupByID",
       args: { groupID: req.params.id },
     });
@@ -36,12 +29,12 @@ export const getAllGroups = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const group = await GroupService.getAllGroups();
+    const group = await groupService.getAllGroups();
 
-    res.json({ group });
+    res.status(200).json({ group });
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "getAllGroups",
       args: { group: req.body },
     });
@@ -50,9 +43,22 @@ export const getAllGroups = async (
 
 export const getGroupByID = async (
   req: IGetGroupRequest,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-  res.json(req.group);
+  const id = req.params.id;
+
+  try {
+    const group = await groupService.getGroupByID(id);
+
+    res.status(200).json(group.toJSON());
+  } catch (err) {
+    next({
+      err,
+      method: "getAllUsers",
+      args: {},
+    });
+  }
 };
 
 export const createGroup = async (
@@ -61,16 +67,12 @@ export const createGroup = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const group = await GroupService.createGroup(req.body);
+    const group = await groupService.createGroup(req.body);
 
-    if (group) {
-      res.status(201).json(group);
-    } else {
-      res.sendStatus(501);
-    }
+    res.status(201).json(group);
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "createGroup",
       args: { group: req.body },
     });
@@ -83,12 +85,12 @@ export const updateGroup = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const group = await GroupService.updateGroup(req.body, req.group.id);
+    const group = await groupService.updateGroup(req.body, req.group.id);
 
-    res.json(group);
+    res.status(200).json(group);
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "updateGroup",
       args: { groupID: req.group.id, group: req.body },
     });
@@ -101,12 +103,12 @@ export const removeGroup = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const group = await GroupService.removeGroup(req.group.id);
+    const group = await groupService.removeGroup(req.group.id);
 
-    res.json(group);
+    res.status(200).json(group);
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "removeGroup",
       args: { groupID: req.group.id },
     });

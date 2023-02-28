@@ -1,31 +1,24 @@
 import { NextFunction, Response } from "express";
 import { sequelize } from "../DB/index.js";
 import { IGetUserAuthInfoRequest } from "../routes/user.js";
-import * as UserService from "../services/user.service.js";
-import * as UserGroupService from "../services/userGroup.service.js";
+import { userService } from "../services/user.service.js";
+import { userGroupService } from "../services/userGroup.service.js";
 
 export const addUserToRequest = async (
   req: IGetUserAuthInfoRequest,
-  res: Response,
+  _res: Response,
   next: NextFunction,
   id: string
 ): Promise<void> => {
   try {
-    const user = await UserService.getUserByID(id);
-
-    if (!user) {
-      res
-        .status(404)
-        .json({ message: `User with id ${req.params.id} not found` });
-      return;
-    }
+    const user = await userService.getUserByID(id);
 
     req.user = user.toJSON();
 
     next();
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "getUserByID",
       args: { id },
     });
@@ -33,17 +26,17 @@ export const addUserToRequest = async (
 };
 
 export const getUsers = async (
-  req: IGetUserAuthInfoRequest,
+  _req: IGetUserAuthInfoRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const users = await UserService.getAllUsers();
+    const users = await userService.getAllUsers();
 
-    res.json({ users });
+    res.status(200).json({ users });
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "getAllUsers",
       args: {},
     });
@@ -52,9 +45,22 @@ export const getUsers = async (
 
 export const getUserByID = async (
   req: IGetUserAuthInfoRequest,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-  res.json(req.user);
+  const id = req.params.id;
+
+  try {
+    const user = await userService.getUserByID(id);
+
+    res.status(200).json(user.toJSON());
+  } catch (err) {
+    next({
+      err,
+      method: "getAllUsers",
+      args: {},
+    });
+  }
 };
 
 export const getUsersByLoginSubstring = async (
@@ -65,12 +71,12 @@ export const getUsersByLoginSubstring = async (
   const { loginSubstring, limit } = req.body;
 
   try {
-    const users = await UserService.getAutoSuggestUsers(loginSubstring, limit);
+    const users = await userService.getAutoSuggestUsers(loginSubstring, limit);
 
-    res.json({ users });
+    res.status(200).json({ users });
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "getAutoSuggestUsers",
       args: { loginSubstring, limit },
     });
@@ -83,16 +89,12 @@ export const addUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const user = await UserService.addUser(req.body);
+    const user = await userService.addUser(req.body);
 
-    if (user) {
-      res.status(201).json(user.dataValues);
-    } else {
-      res.sendStatus(501);
-    }
+    res.status(201).json(user);
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "addUser",
       args: { userID: req.user.id },
     });
@@ -105,12 +107,12 @@ export const updateUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const user = await UserService.updateUser(req.body, req.user.id);
+    const user = await userService.updateUser(req.body, req.user.id);
 
-    res.json(user);
+    res.status(200).json(user);
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "updateUser",
       args: { userID: req.user.id },
     });
@@ -123,12 +125,12 @@ export const deleteUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const user = await UserService.deleteUser(req.user.id);
+    const user = await userService.deleteUser(req.user.id);
 
-    res.json(user);
+    res.status(200).json(user);
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "deleteUser",
       args: { userID: req.user.id },
     });
@@ -144,12 +146,12 @@ export const addUsersToGroup = async (
   const groupID = req.body.id;
 
   try {
-    UserGroupService.addUsersToGroup(groupID, userID, sequelize);
+    userGroupService.addUsersToGroup(groupID, userID, sequelize);
 
     res.status(200);
   } catch (err) {
     next({
-      message: err.message,
+      err,
       method: "addUsersToGroup",
       args: { groupID, userID },
     });

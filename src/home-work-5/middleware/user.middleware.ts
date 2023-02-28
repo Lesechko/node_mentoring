@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { validateGroup, } from "../validator.js";
+import { validateUser } from "../utils/validator.js";
 
-export const groupValidationMiddleware = (
+export const userValidationMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { error } = validateGroup(req.body);
+  const { error } = validateUser(req.body);
 
   if (error) {
     res.status(400).json({

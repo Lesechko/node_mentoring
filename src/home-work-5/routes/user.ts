@@ -1,6 +1,6 @@
 import express, { Request } from "express";
 import { userValidationMiddleware } from "../middleware/user.middleware.js";
-import { IUser } from "../models/User.js";
+import { IUser } from "../DB/models/User.js";
 import {
   addUser,
   addUserToRequest,

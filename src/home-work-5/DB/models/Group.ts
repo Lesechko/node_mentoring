@@ -14,12 +14,12 @@ export interface IGroup {
   id?: string;
 }
 
-type GroupModel = ModelCtor<Model<IGroup, IGroup>>;
+export type GroupModel = ModelCtor<Model<IGroup, IGroup>>;
 
-export let Group: ModelCtor<Model<IGroup, IGroup>> = null;
-
-export const defineGroupModel = async (sequelize: Sequelize) => {
-  const G = sequelize.define(
+export const defineGroupModel = async (
+  sequelize: Sequelize
+): Promise<GroupModel> =>
+  sequelize.define(
     "Group",
     {
       name: {
@@ -41,8 +41,3 @@ export const defineGroupModel = async (sequelize: Sequelize) => {
       timestamps: false,
     }
   );
-
-  Group = G;
-
-  return G;
-};

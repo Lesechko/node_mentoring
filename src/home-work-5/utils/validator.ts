@@ -1,6 +1,6 @@
 import Joi from "joi";
-import { Permission } from "./models/Group.js";
-import { IUser } from "./models/User.js";
+import { Permission } from "../DB/models/Group.js";
+import { IUser } from "../DB/models/User.js";
 
 const validator = (schema: Joi.ObjectSchema<IUser>) => (payload: IUser) =>
   schema.validate(payload, { abortEarly: false });
