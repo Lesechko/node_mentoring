@@ -1,20 +1,24 @@
 import express from "express";
-import { groupRouter, userRouter } from "./routes/index.js";
+import { groupRouter, userRouter, loginRouter } from "./routes/index.js";
 import { runDB } from "./DB/index.js";
 import {
   errorMiddleware,
   logger,
   requestLogger,
 } from "./middleware/logger.middleware.js";
+import { authMiddleware } from "./middleware/auth.middleware.js";
+import cors from "cors";
 
 const app = express();
 const PORT = 7000;
 const host = "127.0.0.1";
 
 app.use(express.json());
+app.use(cors());
 app.use(requestLogger);
-app.use("/users", userRouter);
-app.use("/groups", groupRouter);
+app.use("/users", authMiddleware, userRouter);
+app.use("/groups", authMiddleware, groupRouter);
+app.use("/login", loginRouter);
 
 await runDB();
 

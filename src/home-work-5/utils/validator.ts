@@ -33,5 +33,11 @@ const groupSchema = Joi.object({
     ),
 });
 
+const loginSchema = Joi.object({
+  password: Joi.string().required(),
+  username: Joi.string().required(),
+});
+
 export const validateUser = validator(userSchema);
 export const validateGroup = validator(groupSchema);
+export const validateLogin = validator(loginSchema);
