@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { validateUser } from "../validator.js";
+import { validateUser } from "../utils/validator.js";
 
-export const validationMiddleware = (
+export const userValidationMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
