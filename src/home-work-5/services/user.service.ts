@@ -1,8 +1,8 @@
 import { Model, Transaction } from "sequelize";
-import { IUser } from "../DB/models/User.js";
-import { NotFoundError } from "../utils/NotFoundError.js";
-import { infoLogger } from "../middleware/logger.middleware.js";
-import * as userData from "../data-access/user.data-access.js";
+import { IUser } from "../DB/models/User";
+import { NotFoundError } from "../utils/NotFoundError";
+import { infoLogger } from "../middleware/logger.middleware";
+import * as userData from "../data-access/user.data-access";
 
 const getAllUsers = (): Promise<Model<IUser, IUser>[]> => {
   return userData.getAll();

@@ -1,8 +1,8 @@
 import { Model, Transaction } from "sequelize";
-import { IGroup } from "../DB/models/Group.js";
-import * as groupData from "../data-access/group.data-access.js";
-import { NotFoundError } from "../utils/NotFoundError.js";
-import { infoLogger } from "../middleware/logger.middleware.js";
+import { IGroup } from "../DB/models/Group";
+import * as groupData from "../data-access/group.data-access";
+import { NotFoundError } from "../utils/NotFoundError";
+import { infoLogger } from "../middleware/logger.middleware";
 
 const getAllGroups = (): Promise<Model<IGroup, IGroup>[]> => {
   return groupData.getAll();

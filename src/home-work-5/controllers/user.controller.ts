@@ -1,8 +1,8 @@
 import { NextFunction, Response } from "express";
-import { sequelize } from "../DB/index.js";
-import { IGetUserAuthInfoRequest } from "../routes/user.js";
-import { userService } from "../services/user.service.js";
-import { userGroupService } from "../services/userGroup.service.js";
+import { sequelize } from "../DB/index";
+import { IGetUserAuthInfoRequest } from "../routes/user";
+import { userService } from "../services/user.service";
+import { userGroupService } from "../services/userGroup.service";
 
 export const addUserToRequest = async (
   req: IGetUserAuthInfoRequest,
@@ -96,7 +96,7 @@ export const addUser = async (
     next({
       err,
       method: "addUser",
-      args: { userID: req.user.id },
+      args: { userID: req.body },
     });
   }
 };
@@ -107,14 +107,14 @@ export const updateUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const user = await userService.updateUser(req.body, req.user.id);
+    const user = await userService.updateUser(req.body, req.params.id);
 
     res.status(200).json(user);
   } catch (err) {
     next({
       err,
       method: "updateUser",
-      args: { userID: req.user.id },
+      args: { userID: req.params.id },
     });
   }
 };
@@ -125,14 +125,14 @@ export const deleteUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const user = await userService.deleteUser(req.user.id);
+    const user = await userService.deleteUser(req.params.id);
 
     res.status(200).json(user);
   } catch (err) {
     next({
       err,
       method: "deleteUser",
-      args: { userID: req.user.id },
+      args: { userID: req.params.id },
     });
   }
 };

@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
-import config from "../../config/config.js";
-import { defineGroupModel, GroupModel } from "./models/Group.js";
-import { defineUserModel, UserModel } from "./models/User.js";
-import { addAssociatios } from "./models/UserGroup.js";
+import config from "../../config/config";
+import { defineGroupModel, GroupModel } from "./models/Group";
+import { defineUserModel, UserModel } from "./models/User";
+import { addAssociatios } from "./models/UserGroup";
 
 export let sequelize: Sequelize = null;
 export let User: UserModel = null;

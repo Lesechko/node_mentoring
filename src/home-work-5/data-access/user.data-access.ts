@@ -1,6 +1,6 @@
 import { Model, Op, Transaction } from "sequelize";
-import { User } from "../DB/index.js";
-import { IUser } from "../DB/models/User.js";
+import { User } from "../DB/index";
+import { IUser } from "../DB/models/User";
 
 type UpdatedUserData = [
   affectedCount: number,

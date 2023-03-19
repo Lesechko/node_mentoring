@@ -1,6 +1,6 @@
-import { Group } from "../DB/index.js";
+import { Group } from "../DB/index";
 import { Model, Transaction } from "sequelize";
-import { IGroup } from "../DB/models/Group.js";
+import { IGroup } from "../DB/models/Group";
 
 type UpdatedGroupData = [
   affectedCount: number,

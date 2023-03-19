@@ -1,6 +1,6 @@
 import winston from "winston";
 import { NextFunction, Request, Response } from "express";
-import { isNotFoundError } from "../utils/NotFoundError.js";
+import { isNotFoundError } from "../utils/NotFoundError";
 
 export function requestLogger(req: Request, res: Response, next: NextFunction) {
   const info = {

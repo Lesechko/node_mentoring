@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
-import { infoLogger } from "../middleware/logger.middleware.js";
-import { groupService } from "./group.service.js";
-import { userService } from "./user.service.js";
+import { infoLogger } from "../middleware/logger.middleware";
+import { groupService } from "./group.service";
+import { userService } from "./user.service";
 
 const addUsersToGroup = async (
   groupId: string,
