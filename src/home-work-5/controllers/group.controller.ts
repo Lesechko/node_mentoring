@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from "express";
-import { IGetGroupRequest } from "../routes/group.js";
-import { groupService } from "../services/group.service.js";
+import { IGetGroupRequest } from "../routes/group";
+import { groupService } from "../services/group.service";
 
 export const addGroupToRequest = async (
   req: IGetGroupRequest,
@@ -85,14 +85,14 @@ export const updateGroup = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const group = await groupService.updateGroup(req.body, req.group.id);
+    const group = await groupService.updateGroup(req.body, req.params.id);
 
     res.status(200).json(group);
   } catch (err) {
     next({
       err,
       method: "updateGroup",
-      args: { groupID: req.group.id, group: req.body },
+      args: { groupID: req.params.id, group: req.body },
     });
   }
 };
@@ -103,14 +103,14 @@ export const removeGroup = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const group = await groupService.removeGroup(req.group.id);
+    const group = await groupService.removeGroup(req.params.id);
 
     res.status(200).json(group);
   } catch (err) {
     next({
       err,
       method: "removeGroup",
-      args: { groupID: req.group.id },
+      args: { groupID: req.params.id },
     });
   }
 };
