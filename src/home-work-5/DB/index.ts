@@ -1,5 +1,4 @@
-import { Sequelize } from "sequelize";
-import config from "../../config/config";
+import { Dialect, Sequelize } from "sequelize";
 import { defineGroupModel, GroupModel } from "./models/Group";
 import { defineUserModel, UserModel } from "./models/User";
 import { addAssociatios } from "./models/UserGroup";
@@ -9,11 +8,11 @@ export let User: UserModel = null;
 export let Group: GroupModel = null;
 
 export const runDB = async (): Promise<void> => {
-  const { database, username, password, host, dialect } = config;
+  const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
-  sequelize = new Sequelize(database, username, password, {
-    host,
-    dialect,
+  sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+    host: DB_HOST,
+    dialect: "postgres" as Dialect,
   });
 
   try {
